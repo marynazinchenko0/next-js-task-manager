@@ -12,8 +12,6 @@ export const TaskUndoButton: React.FC<Props> = ({id}) => {
   const [isLoading, setIsLoading] = useState(false)
   const {toast} = useToast()
 
-
-
   const undoCompletionTaskHandler = async () => {
     setIsLoading(true)
     await undoCompletionTask(id).then(() => {

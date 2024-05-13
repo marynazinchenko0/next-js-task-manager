@@ -16,6 +16,7 @@ import TasksPagination from "@/components/TasksPagination";
 import TaskDialog from "@/components/TaskDialog"
 import TaskCompleteButton from "@/components/TaskCompleteButton";
 import TaskUndoButton from "@/components/TaskUndoButton";
+import ListFilter from "@/components/ListFilter"
 
 // TODO Type - seacrhParams
 // @ts-ignore
@@ -39,18 +40,7 @@ export default async function Tasks({searchParams}) {
     <>
       <h1 className="text-3xl font-semibold">Your tasks</h1>
       <div className="grid items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
-        <nav
-          className="grid gap-4 text-sm text-muted-foreground" x-chunk="dashboard-04-chunk-0"
-        >
-          <Link href="#" className="font-semibold text-primary">
-            General
-          </Link>
-          <Link href="#">Security</Link>
-          <Link href="#">Integrations</Link>
-          <Link href="#">Support</Link>
-          <Link href="#">Organizations</Link>
-          <Link href="#">Advanced</Link>
-        </nav>
+        <ListFilter></ListFilter>
         <div>
           <TaskDialog></TaskDialog>
           <div className="grid gap-6">
