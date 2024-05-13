@@ -1,6 +1,6 @@
 import Link from "next/link"
 import {Button} from "@/components/ui/button"
-import {Plus} from "lucide-react"
+import {Pencil} from "lucide-react"
 import {
   Card,
   CardContent,
@@ -9,16 +9,26 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import PriorityLabel from '@/components/PriorityLabel'
+import TaskPriorityLabel from '@/components/TaskPriorityLabel'
 import { createClient } from "@/utils/supabase/server";
+import TaskDeleteButton from "@/components/TaskDeleteButton";
+import TasksPagination from "@/components/TasksPagination";
+import TaskDialog from "@/components/TaskDialog"
 
-export default async function Tasks() {
+// TODO Type - seacrhParams
+// @ts-ignore
+export default async function Tasks({ searchParams }) {
   const supabase = createClient();
 
-  const { data: tasks } = await supabase
+  const { page } = searchParams
+  const pageSize = 6;
+  const pageIndex = page || 1;
+
+  const { data: tasks, count: tasksTotal } = await supabase
     .from('tasks')
-    .select('*')
-    .range(0, 9)
+    .select('*', { count: 'exact' })
+    .limit(pageSize)
+    .range((pageIndex - 1) * pageSize , pageIndex * pageSize)
 
   return (
     <>
@@ -37,16 +47,14 @@ export default async function Tasks() {
           <Link href="#">Advanced</Link>
         </nav>
         <div>
-          <Button className="w-full mb-5">
-            <Plus className="mr-2 h-4 w-4"/> Add new task
-          </Button>
+          <TaskDialog></TaskDialog>
           <div className="grid gap-6">
             {tasks && tasks.map(task => (
                 <Card key={task.id}>
                   <CardHeader>
                     <div className="flex flex-row justify-between">
                       <CardTitle>{task.title}</CardTitle>
-                      <PriorityLabel priority={task.priority}></PriorityLabel>
+                      <TaskPriorityLabel priority={task.priority}></TaskPriorityLabel>
                     </div>
                   </CardHeader>
                   <CardContent>
@@ -59,8 +67,10 @@ export default async function Tasks() {
                       </CardDescription>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="secondary">Edit</Button>
-                      <Button>Complete</Button>
+
+                      <TaskDeleteButton id={task.id}></TaskDeleteButton>
+                      <Button variant="secondary" size="icon" className="hover:bg-blue-200"><Pencil /></Button>
+                      <Button className="hover:bg-green-800">Complete</Button>
                     </div>
 
                   </CardFooter>
@@ -70,6 +80,8 @@ export default async function Tasks() {
           </div>
         </div>
       </div>
+
+      <TasksPagination pageSize={pageSize} tasksTotal={tasksTotal as number} currentPage={+pageIndex}></TasksPagination>
     </>
   )
 }

@@ -5,13 +5,13 @@ type Props = {
   priority: string;
 };
 
-export const PriorityLabel: React.FC<Props> = ({priority}) => {
+export const TaskPriorityLabel: React.FC<Props> = ({priority}) => {
   switch (priority) {
 
     case "lowest":
-      return <ChevronDown color="#368af7"/>;
-    case "low":
       return <ChevronsDown color="#368af7"/>;
+    case "low":
+      return <ChevronDown color="#368af7"/>;
     case "medium":
       return <Menu color="#fa9f1e"/>;
     case "high":
@@ -24,4 +24,4 @@ export const PriorityLabel: React.FC<Props> = ({priority}) => {
   }
 }
 
-export default PriorityLabel
+export default TaskPriorityLabel
