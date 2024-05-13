@@ -10,25 +10,30 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import TaskPriorityLabel from '@/components/TaskPriorityLabel'
-import { createClient } from "@/utils/supabase/server";
+import {createClient} from "@/utils/supabase/server";
 import TaskDeleteButton from "@/components/TaskDeleteButton";
 import TasksPagination from "@/components/TasksPagination";
 import TaskDialog from "@/components/TaskDialog"
+import TaskCompleteButton from "@/components/TaskCompleteButton";
+import TaskUndoButton from "@/components/TaskUndoButton";
 
 // TODO Type - seacrhParams
 // @ts-ignore
-export default async function Tasks({ searchParams }) {
+export default async function Tasks({searchParams}) {
   const supabase = createClient();
 
-  const { page } = searchParams
+  const {page} = searchParams
   const pageSize = 6;
   const pageIndex = page || 1;
 
-  const { data: tasks, count: tasksTotal } = await supabase
+  const {data: tasks, count: tasksTotal} = await supabase
     .from('tasks')
-    .select('*', { count: 'exact' })
+    .select('*', {count: 'exact'})
     .limit(pageSize)
-    .range((pageIndex - 1) * pageSize , pageIndex * pageSize)
+    .range((pageIndex - 1) * pageSize, pageIndex * pageSize)
+    .order('completed')
+
+  console.log(tasks)
 
   return (
     <>
@@ -50,10 +55,10 @@ export default async function Tasks({ searchParams }) {
           <TaskDialog></TaskDialog>
           <div className="grid gap-6">
             {tasks && tasks.map(task => (
-                <Card key={task.id}>
+                <Card key={task.id} className={task.completed ? "bg-gray-200" : ''}>
                   <CardHeader>
                     <div className="flex flex-row justify-between">
-                      <CardTitle>{task.title}</CardTitle>
+                      <CardTitle>{task.title} </CardTitle>
                       <TaskPriorityLabel priority={task.priority}></TaskPriorityLabel>
                     </div>
                   </CardHeader>
@@ -68,9 +73,20 @@ export default async function Tasks({ searchParams }) {
                     </div>
                     <div className="flex gap-2">
 
-                      <TaskDeleteButton id={task.id}></TaskDeleteButton>
-                      <Button variant="secondary" size="icon" className="hover:bg-blue-200"><Pencil /></Button>
-                      <Button className="hover:bg-green-800">Complete</Button>
+
+                      {task.completed
+                        ?
+                        <>
+                          <TaskUndoButton id={task.id}></TaskUndoButton>
+                          <TaskDeleteButton id={task.id}></TaskDeleteButton>
+                        </>
+                        :
+                        <>
+                          <TaskDeleteButton id={task.id}></TaskDeleteButton>
+                          <Button variant="secondary" size="icon" className="hover:bg-blue-200"><Pencil/></Button>
+                          <TaskCompleteButton id={task.id}></TaskCompleteButton>
+                        </>
+                      }
                     </div>
 
                   </CardFooter>
