@@ -1,6 +1,5 @@
 import {ChevronDown, Menu, ChevronsDown, ChevronUp, ChevronsUp} from "lucide-react"
 
-// TODO:  priority: 'lowest' | 'low' | 'medium' | 'high' | 'highest';
 type Props = {
   priority: string;
 };

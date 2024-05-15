@@ -1,5 +1,5 @@
 "use client"
-
+import React, { useMemo } from 'react';
 import {
   Pagination,
   PaginationContent,
@@ -16,7 +16,9 @@ type Props = {
 }
 
 const TasksPagination: React.FC<Props> = ({tasksTotal, pageSize, currentPage}) => {
-  const pagesCount = Math.ceil(tasksTotal / pageSize)
+  const pagesCount = useMemo(() => Math.ceil(tasksTotal / pageSize), [tasksTotal, pageSize]);
+  const pagesArray = useMemo(() => [...Array(pagesCount)], [pagesCount]);
+
   return (
     <Pagination className="ml-auto mr-0 w-fit">
       <PaginationContent>
@@ -24,7 +26,7 @@ const TasksPagination: React.FC<Props> = ({tasksTotal, pageSize, currentPage}) =
           <PaginationPrevious href={`tasks?page=${currentPage - 1}`}/>
         </PaginationItem>
         {
-          [...Array(pagesCount)].map((_, i) =>
+          pagesArray.map((_, i) =>
             <PaginationItem key={`pagination-item-${i}`}>
               <PaginationLink isActive={currentPage === i + 1} href={`tasks?page=${i + 1}`}>{i + 1}</PaginationLink>
             </PaginationItem>

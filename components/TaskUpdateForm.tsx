@@ -1,21 +1,29 @@
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {Input} from "@/components/ui/input"
-import {Label} from "@/components/ui/label"
-import {Textarea} from "@/components/ui/textarea"
-import addTask from "@/actions/addTask";
-import {Plus} from "lucide-react";
+"use client";
+
+import { useFormStatus } from "react-dom";
+import updateTask from "@/actions/updateTask";
+import {Label} from "@/components/ui/label";
+import {Input} from "@/components/ui/input";
+import {Textarea} from "@/components/ui/textarea";
+import {Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Button} from "@/components/ui/button";
-{/*TODO: Can i implement loader and toasts after submit here?*/}
-export const TaskCreationForm = () => {
+import {Loader2} from "lucide-react";
+import type {Task} from "@/types";
+
+function UpdateButton() {
+  const { pending } = useFormStatus();
   return (
-    <form action={addTask}>
+    <Button type="submit" disabled={pending}>
+      {pending && <Loader2  className="mr-2 h-4 w-4 animate-spin"/>}
+      Update
+    </Button>
+  );
+}
+
+export function TaskUpdateForm({ task }: { task: Task }) {
+  return (
+    <form action={updateTask}>
+      <input type="hidden" name="id" value={task.id}/>
       <div className="mb-4">
         <Label htmlFor="title">Title</Label>
         <Input
@@ -23,6 +31,7 @@ export const TaskCreationForm = () => {
           name="title"
           placeholder="What needs to be done?"
           required
+          defaultValue={task.title}
         ></Input>
       </div>
 
@@ -33,13 +42,14 @@ export const TaskCreationForm = () => {
           name="description"
           placeholder="Describe it!"
           required
+          defaultValue={task.description}
         ></Textarea>
       </div>
 
       <div className="mb-4">
         <Label htmlFor="priority">Priority</Label>
         <div>
-          <Select name="priority" required>
+          <Select name="priority" required  defaultValue={task.priority}>
             <SelectTrigger>
               <SelectValue placeholder="Select a priority"/>
             </SelectTrigger>
@@ -65,16 +75,13 @@ export const TaskCreationForm = () => {
             placeholder="What needs to be done?"
             required
             className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-200"
+            defaultValue={task.deadline}
           />
         </div>
       </div>
-      <div>
-        <Button className="w-full" type="submit">
-          <Plus className="mr-2 h-4 w-4"/> Add Task
-        </Button>
-      </div>
+      <UpdateButton/>
     </form>
-  )
+  );
 }
 
-export default TaskCreationForm
+export default TaskUpdateForm;

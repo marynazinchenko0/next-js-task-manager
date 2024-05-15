@@ -1,5 +1,5 @@
 "use client"
-import {useState} from 'react'
+import {useTransition} from 'react'
 import undoCompletionTask from '@/actions/undoCompletionTask'
 import {Loader2, Undo2} from "lucide-react";
 import {Button} from "@/components/ui/button";
@@ -9,28 +9,27 @@ type Props = {
   id: number
 }
 export const TaskUndoButton: React.FC<Props> = ({id}) => {
-  const [isLoading, setIsLoading] = useState(false)
+  const [ isPending, startTransition ] = useTransition()
   const {toast} = useToast()
 
-  const undoCompletionTaskHandler = async () => {
-    setIsLoading(true)
-    await undoCompletionTask(id).then(() => {
-      toast({
-        title: "Task returned!",
+  const undoCompletionTaskHandler =  () => {
+    startTransition(async() => {
+      await undoCompletionTask(id).then(() => {
+        toast({
+          title: "Task returned!",
+        })
+      }).catch(() => {
+        toast({
+          title: "Uh oh! Something went wrong.",
+          description: "There was a problem with your request.",
+        })
       })
-    }).catch(() => {
-      toast({
-        title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your request.",
-      })
-    }).finally(() =>
-      setIsLoading(false)
-    )
+    })
   }
   return (
-    <Button onClick={undoCompletionTaskHandler} variant="secondary" disabled={isLoading} size="icon" className="hover:bg-green-200">
+    <Button onClick={undoCompletionTaskHandler} variant="secondary" disabled={isPending} size="icon" className="hover:bg-green-200">
       {
-        isLoading
+        isPending
           ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
           : <Undo2 />
       }
