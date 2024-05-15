@@ -17,11 +17,18 @@ type SearchParams = {
   sortBy: string;
   priority: string;
   deadline: string;
+  status: string;
 };
 export default async function Tasks({searchParams}: { searchParams: SearchParams }) {
   const supabase = createClient();
 
-  const {page, sortBy, priority, deadline} = searchParams
+  const {
+    page,
+    sortBy,
+    priority,
+    deadline,
+    status
+  } = searchParams
   const pageSize = 6;
   const pageIndex = Number(page ?? '1') - 1;
 
@@ -31,7 +38,8 @@ export default async function Tasks({searchParams}: { searchParams: SearchParams
     perPage: pageSize,
     sortBy: sortBy,
     priority: priority,
-    deadline: deadline
+    deadline: deadline,
+    status: status
   })
 
   const pagesCount = Math.ceil((tasksTotal || 0) / pageSize);

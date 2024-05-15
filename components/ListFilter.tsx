@@ -21,6 +21,7 @@ export const ListFilter = () => {
   const [sortedDeadline, setSortedDeadline] = useState('')
   const [sortedPriority, setSortedPriority] = useState('')
   const [selectedPriority, setSelectedPriority] = useState('all');
+  const [sortedStatus, setSortedStatus] = useState('')
 
   const updateSearchParams = (paramsToUpdate: { [s: string]: unknown } | ArrayLike<unknown>) => {
     const url = new URL(pathName, window.location.origin);
@@ -42,8 +43,9 @@ export const ListFilter = () => {
       sortBy: sortedDeadline,
       priority: selectedPriority !== 'all' ? selectedPriority : null,
       deadline: selectedDeadline,
+      status: sortedStatus
     });
-  }, [sortedDeadline, selectedPriority, selectedDeadline])
+  }, [sortedDeadline, selectedPriority, selectedDeadline, sortedStatus])
 
 
   const clearState = (setStateFunction: {
@@ -72,6 +74,11 @@ export const ListFilter = () => {
     clearSearchParams('sortBy');
   }
 
+  const clearStatusFilter = () => {
+    clearState(setSortedStatus);
+    clearSearchParams('status');
+  }
+
 
   return (
     <div className="grid gap-4">
@@ -88,7 +95,6 @@ export const ListFilter = () => {
         </SelectContent>
       </Select>
 
-
       <input
         id="deadline"
         name="deadline"
@@ -104,9 +110,7 @@ export const ListFilter = () => {
               Clear filter
           </button>
       }
-
       <hr/>
-
 
       <p>Priority</p>
 
@@ -139,6 +143,26 @@ export const ListFilter = () => {
       {
         ((selectedPriority && selectedPriority !== 'all') || sortedPriority) &&
           <button onClick={() => clearPriorityFilter()} className="underline text-xs text-end">
+              Clear filter
+          </button>
+      }
+      <hr/>
+
+      <p>Status</p>
+      <Select value={sortedStatus} onValueChange={value => setSortedStatus(value)}>
+        <SelectTrigger>
+          <SelectValue placeholder="Sort by status"/>
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem value='completed'>Completed</SelectItem>
+            <SelectItem value='uncompleted'>Uncompleted</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+      {
+        (sortedStatus) &&
+          <button onClick={() => clearStatusFilter()} className="underline text-xs text-end">
               Clear filter
           </button>
       }

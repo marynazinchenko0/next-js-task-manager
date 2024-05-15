@@ -10,9 +10,17 @@ export function getTasks(
     sortBy?: string;
     priority?: string;
     deadline?: string;
+    status?: string;
   },
 ) {
-  const {perPage, pageIndex, sortBy, priority, deadline} = params;
+  const {
+    perPage,
+    pageIndex,
+    sortBy,
+    priority,
+    deadline,
+    status
+  } = params;
   const {startOffset, endOffset} = getPaginationOffsets(pageIndex, perPage);
   const {orderType, orderAscending} = setOrderType(sortBy);
 
@@ -24,6 +32,7 @@ export function getTasks(
 
   query = applyFilter(query, 'priority', priority);
   query = applyFilter(query, 'deadline', deadline);
+  query = applyStatusFilter(query, status);
 
   return query;
 }
@@ -51,6 +60,17 @@ function applyFilter(query: any, filterBy: string, filterValue: string | undefin
   return query;
 }
 
+
+function applyStatusFilter(query: any, filterValue: string | undefined) {
+  console.log(filterValue)
+  if (filterValue) {
+    const status = filterValue === 'completed'
+    console.log(status)
+    query = query.eq('completed', status)
+  }
+
+  return query;
+}
 
 function getPaginationOffsets(pageIndex: number, perPage: number) {
   const pageSize = perPage;
