@@ -55,7 +55,7 @@ function applyFilter(query: any, filterBy: string, filterValue: string | undefin
 function getPaginationOffsets(pageIndex: number, perPage: number) {
   const pageSize = perPage;
   const startOffset = pageIndex * pageSize;
-  const endOffset = startOffset + pageSize;
+  const endOffset = startOffset + pageSize - 1;
 
   return {
     startOffset,

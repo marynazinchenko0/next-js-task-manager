@@ -12,11 +12,11 @@ import {
 type Props = {
   tasksTotal: number,
   pageSize: number,
-  currentPage: number
+  currentPage: number,
+  pagesCount: number
 }
 
-const TasksPagination: React.FC<Props> = ({tasksTotal, pageSize, currentPage}) => {
-  const pagesCount = useMemo(() => Math.ceil(tasksTotal / pageSize), [tasksTotal, pageSize]);
+const TasksPagination: React.FC<Props> = ({tasksTotal, pageSize, currentPage, pagesCount}) => {
   const pagesArray = useMemo(() => [...Array(pagesCount)], [pagesCount]);
 
   return (

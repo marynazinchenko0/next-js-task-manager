@@ -10,6 +10,7 @@ import ListFilter from "@/components/ListFilter"
 import TaskCreationForm from "@/components/TaskCreationForm";
 import {getTasks} from "@/lib/tasks/queries";
 import { TaskCard } from "@/components/TaskCard";
+import {useMemo} from "react";
 
 type SearchParams = {
   page: string;
@@ -24,6 +25,7 @@ export default async function Tasks({searchParams}: { searchParams: SearchParams
   const pageSize = 6;
   const pageIndex = Number(page ?? '1') - 1;
 
+
   const {data: tasks, count: tasksTotal} = await getTasks(supabase, {
     pageIndex: pageIndex,
     perPage: pageSize,
@@ -31,6 +33,8 @@ export default async function Tasks({searchParams}: { searchParams: SearchParams
     priority: priority,
     deadline: deadline
   })
+
+  const pagesCount = Math.ceil((tasksTotal || 0) / pageSize);
 
   return (
     <>
@@ -47,19 +51,27 @@ export default async function Tasks({searchParams}: { searchParams: SearchParams
             </CardContent>
           </Card>
           <div className="grid gap-6">
-            {tasks && tasks.map(task => (
-              <TaskCard key={task.id} task={task}></TaskCard>
-              )
+            {tasks && tasks.length > 0 ? (
+              tasks.map(task => (
+                <TaskCard key={task.id} task={task}></TaskCard>
+              ))
+            ) : (
+              <p>No tasks available</p>
             )}
           </div>
         </div>
       </div>
 
-      <TasksPagination
-        pageSize={pageSize}
-        tasksTotal={tasksTotal as number}
-        currentPage={page ? Number(page) : 1}
-      ></TasksPagination>
+      {
+        pagesCount > 1 && (
+          <TasksPagination
+            pageSize={pageSize}
+            tasksTotal={tasksTotal as number}
+            currentPage={page ? Number(page) : 1}
+            pagesCount={pagesCount}
+          ></TasksPagination>
+        )
+      }
     </>
   )
 }
