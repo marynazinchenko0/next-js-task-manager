@@ -3,7 +3,7 @@ import Link from "next/link"
 import { CircleUser, Menu, ClipboardList } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import AuthButton from "@/components/AuthButton";
+import AuthButton from "@/components/layout/AuthButton";
 
 export default async function Header() {
   return (
