@@ -1,6 +1,6 @@
 "use client"
 import {useTransition} from 'react'
-import deleteTask from "@/actions/deleteTask";
+import deleteTask from "@/actions/task/deleteTask";
 import {Trash2, Loader2} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {useToast} from "@/components/ui/use-toast"

@@ -1,6 +1,6 @@
 "use client"
 import {useTransition} from 'react'
-import undoCompletionTask from '@/actions/undoCompletionTask'
+import undoCompletionTask from '@/actions/task/undoCompletionTask'
 import {Loader2, Undo2} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {useToast} from "@/components/ui/use-toast"

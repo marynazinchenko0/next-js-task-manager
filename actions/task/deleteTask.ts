@@ -10,7 +10,6 @@ export default async function deleteTask(taskId: number) {
     return;
   }
 
-  // Delete todo item from supabase database
   const { data, error } = await supabase
     .from("tasks")
     .delete()

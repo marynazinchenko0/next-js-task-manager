@@ -10,7 +10,6 @@ import ListFilter from "@/components/ListFilter"
 import TaskCreationForm from "@/components/TaskCreationForm";
 import {getTasks} from "@/lib/tasks/queries";
 import { TaskCard } from "@/components/TaskCard";
-import {useMemo} from "react";
 
 type SearchParams = {
   page: string;
@@ -21,6 +20,13 @@ type SearchParams = {
 };
 export default async function Tasks({searchParams}: { searchParams: SearchParams }) {
   const supabase = createClient();
+  // const {
+  //   data: {user},
+  // } = await supabase.auth.getUser();
+  //
+  // if (!user) {
+  //   redirect("/login")
+  // }
 
   const {
     page,

@@ -9,10 +9,10 @@ import {
 import {Input} from "@/components/ui/input"
 import {Label} from "@/components/ui/label"
 import {Textarea} from "@/components/ui/textarea"
-import addTask from "@/actions/addTask";
+import addTask from "@/actions/task/addTask";
 import {Plus} from "lucide-react";
 import {Button} from "@/components/ui/button";
-{/*TODO: Can i implement loader and toasts after submit here?*/}
+{/*TODO: implement loader and toasts after submit here?*/}
 export const TaskCreationForm = () => {
   return (
     <form action={addTask}>

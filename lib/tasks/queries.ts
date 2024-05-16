@@ -39,13 +39,13 @@ export function getTasks(
 
 function setOrderType(sortBy: string | undefined) {
   let orderType = 'created_at';
-  let orderAscending = true;
+  let orderAscending = false;
 
   if (sortBy && (sortBy === 'nearest' || sortBy === 'furthest')) {
     orderType = 'deadline';
 
-    if (sortBy === 'furthest') {
-      orderAscending = false;
+    if (sortBy === 'nearest') {
+      orderAscending = true;
     }
   }
 
@@ -62,10 +62,8 @@ function applyFilter(query: any, filterBy: string, filterValue: string | undefin
 
 
 function applyStatusFilter(query: any, filterValue: string | undefined) {
-  console.log(filterValue)
   if (filterValue) {
     const status = filterValue === 'completed'
-    console.log(status)
     query = query.eq('completed', status)
   }
 

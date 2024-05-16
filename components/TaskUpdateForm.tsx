@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
-import updateTask from "@/actions/updateTask";
+import updateTask from "@/actions/task/updateTask";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
@@ -9,6 +9,7 @@ import {Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVal
 import {Button} from "@/components/ui/button";
 import {Loader2} from "lucide-react";
 import type {Task} from "@/types";
+import {priorityLabels} from "@/constants/priorityLabels";
 
 function UpdateButton() {
   const { pending } = useFormStatus();
@@ -55,11 +56,11 @@ export function TaskUpdateForm({ task }: { task: Task }) {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="lowest">Lowest</SelectItem>
-                <SelectItem value="low">Low</SelectItem>
-                <SelectItem value="medium">Medium</SelectItem>
-                <SelectItem value="high">High</SelectItem>
-                <SelectItem value="highest">Highest</SelectItem>
+                {
+                  Object.entries(priorityLabels).map(([value, label]) => (
+                    <SelectItem key={value} value={value}>{label}</SelectItem>
+                  ))
+                }
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -72,7 +73,6 @@ export function TaskUpdateForm({ task }: { task: Task }) {
             id="deadline"
             name="deadline"
             type="date"
-            placeholder="What needs to be done?"
             required
             className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-gray-200"
             defaultValue={task.deadline}
